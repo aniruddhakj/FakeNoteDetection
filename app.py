@@ -5,7 +5,7 @@ import project
 
 def main():
     img_file = st.sidebar.file_uploader(
-        label='', type=['png', 'jpg'], help="upload image to be evaluated")
+        label='', type=['png', 'jpg', 'jpeg'], help="upload image to be evaluated")
     if img_file:
         save_uploaded_file(img_file)
 
