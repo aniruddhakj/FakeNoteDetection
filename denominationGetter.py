@@ -3,7 +3,7 @@
 # from matplotlib import pyplot as plt
 from cv2 import cv2
 from os import listdir
-from processing import read_img, resize_img, img_to_gray, median_blur, adaptive_thresh
+from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh
 from imageDisplay import display
 
 
@@ -15,13 +15,13 @@ def getDenomination(filePath):
 
     orb = cv2.ORB_create() # Create ORB object with default values
 
-    test_img = read_img(filePath)
+    test_img = readImage()(filePath)
 
-    original2 = resize_img(test_img, 0.4)
+    original2 = resizeImage()(test_img, 0.4)
     # display('Input Image', original2)
-    original1 = img_to_gray(original2)
-    original3 = median_blur(original1)
-    original = adaptive_thresh(original3)
+    original1 = imageToGray()(original2)
+    original3 = medianBlur()(original1)
+    original = adaptiveThresh()(original3)
     # display('Input Processed Image', original)
     # keypoints and descriptors
     (kp1, des1) = orb.detectAndCompute(test_img, None)
@@ -45,13 +45,12 @@ def getDenomination(filePath):
 
         (kp2, des2) = orb.detectAndCompute(train_img, None)
 
-        # brute force matcher
+        # Initialize the Brute Force Matcher object
         bf = cv2.BFMatcher()
         all_matches = bf.knnMatch(des1, des2, k = 2)
-
         good = []
         for (m, n) in all_matches:
-            if m.distance < 0.789 * n.distance:
+            if m.distance < 0.789 * n.distance: # 0.789 is the ratio of the distance between the two closest matches
                 good.append([m])
 
         if len(good) > max_val:
@@ -63,14 +62,12 @@ def getDenomination(filePath):
     if max_val != 8:
         print(training_set[max_pt])
         print('good matches ', max_val)
-
         train_img = cv2.imread(training_set[max_pt])
-        img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
-
         note = str(training_set[max_pt])[12:-4]
         print('\nDetected note: ', note)
+
+        # uncomment to display the side by side comparison between the input image and the matched image
+        # img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
         # (plt.imshow(img3), plt.show())
-
-
     else:
         print('No Matches')

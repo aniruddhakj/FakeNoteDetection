@@ -13,7 +13,7 @@ def display(window_name, image):
     window_width = int(image.shape[1] * scale)
     window_height = int(image.shape[0] * scale)
 
-    # reescale the resolution of the window
+    # rescale the resolution of the window
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
     cv2.resizeWindow(window_name, window_width, window_height)
 
