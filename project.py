@@ -13,7 +13,7 @@ def read_img(file_name):
 # resize image with fixed aspect ratio
 def resize_img(image, scale):
     res = cv2.resize(image, None, fx=scale, fy=scale,
-                     interpolation=cv2.INTER_AREA)
+                     interpolation = cv2.INTER_AREA)
     return res
 
 
