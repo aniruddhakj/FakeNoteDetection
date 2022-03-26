@@ -1,7 +1,10 @@
+'''File containing the display methods'''
+
 from cv2 import cv2
 
-# calculate scale and fit into display
+
 def display(window_name, image):
+    '''Calculates scale and fits into display'''
     screen_res = 960, 540
 
     scale_width = screen_res[0] / image.shape[1]

@@ -1,9 +1,10 @@
 import streamlit as st
 import os
-import project
+import denominationGetter
 
 
 def main():
+    '''Main function'''
     img_file = st.sidebar.file_uploader(
         label='', type=['png', 'jpg', 'jpeg'], help="upload image to be evaluated")
     if img_file:
@@ -11,10 +12,10 @@ def main():
 
 
 def save_uploaded_file(uploadedfile):
-    '''Saves the selected image in Present working directory for google API processing'''
+    '''Saves the selected image in the directory specified'''
     with open(os.path.join("./files/Test", uploadedfile.name), "wb") as f:
         f.write(uploadedfile.getbuffer())
-        project.getDenomination("files/Test/" + uploadedfile.name)
+        denominationGetter.getDenomination("files/Test/" + uploadedfile.name)
     return st.success("Selected image {}".format(uploadedfile.name))
 
 
