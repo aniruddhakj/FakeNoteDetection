@@ -3,7 +3,7 @@
 # from matplotlib import pyplot as plt
 from cv2 import cv2
 from os import listdir
-from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh
+from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
 from imageDisplay import display
 
 
@@ -15,13 +15,16 @@ def getDenomination(filePath):
 
     orb = cv2.ORB_create() # Create ORB object with default values
 
-    test_img = readImage()(filePath)
+    test_img = readImage(filePath)
 
-    original2 = resizeImage()(test_img, 0.4)
+    # Uncomment this block to display image after the various processing steps
+    # original2 = resizeImage(test_img, 0.4)
     # display('Input Image', original2)
-    original1 = imageToGray()(original2)
-    original3 = medianBlur()(original1)
-    original = adaptiveThresh()(original3)
+    # original1 = imageToGray(original2)
+    # original3 = medianBlur(original1)
+    # original = adaptiveThresh(original3)
+    # originalBin = convertToBinary(original)
+    # display('BINARY IMAGE', originalBin)
     # display('Input Processed Image', original)
     # keypoints and descriptors
     (kp1, des1) = orb.detectAndCompute(test_img, None)

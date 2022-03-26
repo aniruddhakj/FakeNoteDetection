@@ -20,6 +20,11 @@ def imageToGray(image):
     img_gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
     return img_gray
 
+def convertToBinary(image):
+    '''Converts an image to binary'''
+    img_thresh = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    return img_thresh
+
 
 def medianBlur(image):
     '''Blurs an image using the median filter'''
