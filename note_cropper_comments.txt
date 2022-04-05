@@ -1,0 +1,14 @@
+Cases for which it does not work:
+
+1) Super high resolution images. Try to keep resolution below 2048x2048
+2) Images where note is pretty close to the edge. The entire border of the image will 
+be considered as the contour (padding the image will probably solve this).
+3) Too many distinct objects around the note.
+4) Note is a very small part of the image.
+
+If dilation is not performed, we will get tons of segments within the note and the 
+note as a whole will not be segmented.
+Using higher size of structuring element like 7x7 helps to reduce distance between 
+any gaps in the edges and helps us segment the entire note.
+Too high a size will segment other background objects along with the note.
+

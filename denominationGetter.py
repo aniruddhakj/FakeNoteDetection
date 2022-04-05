@@ -3,6 +3,7 @@
 # from matplotlib import pyplot as plt
 from cv2 import cv2
 from os import listdir
+import matplotlib.pyplot as plt
 from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
 from imageDisplay import display
 
