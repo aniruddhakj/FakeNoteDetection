@@ -6,7 +6,7 @@ kernel = np.ones((3, 3), np.float32) / 9
 
 # Load template image , Convert grayscale , Detect edge
 # Template matching using edges instead of the original image can greatly improve the accuracy of template matching .
-def matcher(path):
+def matcher(path,note):
     template = cv2.imread(path)
     template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
     template = cv2.filter2D(template, -1, kernel)
@@ -16,7 +16,7 @@ def matcher(path):
 
     # Traverse the image to match the template
     # Load image , Convert to grayscale , Initialize the bookkeeping variable used to track the matching area
-    image = cv2.imread('files/Train/100_new/100.jpg')
+    image = cv2.imread(note)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = cv2.filter2D(gray, -1, kernel)
     found = None
@@ -57,17 +57,9 @@ def matcher(path):
     print("Correlation Value:", maxVal, maxVal/((endX-startX)*(endY-startY)))
     # Need to perform thresholding on correlation value
 
-def runner(note):
-    matcher('ground_truth/0.jpg',note)
-    matcher('ground_truth/1.jpg', note)
-    matcher('ground_truth/2.jpg', note)
-    matcher('ground_truth/3.jpg', note)
-    matcher('ground_truth/4.jpg', note)
-    matcher('ground_truth/5.jpg', note)
-    matcher('ground_truth/6.jpg', note)
-    matcher('ground_truth/7.jpg', note)
-    matcher('ground_truth/8.jpg', note)
-    matcher('ground_truth/9.jpg', note)
-    matcher('ground_truth/10.jpg', note)
-    matcher('ground_truth/11.jpg', note)
-    matcher('ground_truth/12.jpg', note)
+def runner(note, den):
+    
+    for i in range(13):
+        matcher(f"ground_truth/{den}/{i}.jpg",note)
+
+#runner('files/Train/100_new/100.jpg',"100_new")
