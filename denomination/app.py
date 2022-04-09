@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-import denominationGetter
+import denomination.denominationGetter as denominationGetter
 
 
 def main():
