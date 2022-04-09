@@ -5,7 +5,7 @@ from cv2 import cv2
 from os import listdir
 import matplotlib.pyplot as plt
 from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
-from denomination.imageDisplay import display
+from imageDisplay import display
 
 
 def getDenomination(filePath):
