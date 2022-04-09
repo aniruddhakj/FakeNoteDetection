@@ -62,4 +62,4 @@ def runner(note, den):
     for i in range(13):
         matcher(f"ground_truth/{den}/{i}.jpg",note)
 
-#runner('files/Train/100_new/100.jpg',"100_new")
+runner('files/Train/100_new/100.jpg',"100_new")
