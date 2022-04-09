@@ -1,4 +1,4 @@
-from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
+from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
 # from imageDisplay import display
 import os
 
