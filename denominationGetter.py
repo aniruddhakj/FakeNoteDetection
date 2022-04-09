@@ -14,7 +14,7 @@ def getDenomination(filePath):
     max_pt = -1
     max_kp = 0
 
-    orb = cv2.ORB_create() # Create ORB object with default values
+    orb = cv2.ORB_create()  # Create ORB object with default values
 
     test_img = readImage(filePath)
 
@@ -51,10 +51,10 @@ def getDenomination(filePath):
 
         # Initialize the Brute Force Matcher object
         bf = cv2.BFMatcher()
-        all_matches = bf.knnMatch(des1, des2, k = 2)
+        all_matches = bf.knnMatch(des1, des2, k=2)
         good = []
         for (m, n) in all_matches:
-            if m.distance < 0.789 * n.distance: # 0.789 is the ratio of the distance between the two closest matches
+            if m.distance < 0.789 * n.distance:  # 0.789 is the ratio of the distance between the two closest matches
                 good.append([m])
 
         if len(good) > max_val:
@@ -71,7 +71,12 @@ def getDenomination(filePath):
         print('\nDetected note: ', note)
 
         # uncomment to display the side by side comparison between the input image and the matched image
-        # img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
-        # (plt.imshow(img3), plt.show())
+        img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
+        (plt.imshow(img3), plt.show())
     else:
         print('No Matches')
+
+
+# testing denominations
+if __name__ == '__main__':
+    getDenomination('files/Test/doo.png')
