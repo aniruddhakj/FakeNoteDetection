@@ -5,7 +5,7 @@ from cv2 import cv2
 from os import listdir
 import matplotlib.pyplot as plt
 from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
-from imageDisplay import display
+from Denomination.imageDisplay import display
 
 
 def getDenomination(filePath):
@@ -79,4 +79,4 @@ def getDenomination(filePath):
 
 # testing denominations
 if __name__ == '__main__':
-    getDenomination('files/Test/doo.png')
+    getDenomination('files/Test/100.jpg')

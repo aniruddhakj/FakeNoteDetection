@@ -1,7 +1,7 @@
 import numpy as np
 from cv2 import cv2
 import matplotlib.pyplot as plt
-img1 = cv2.imread('./files/Test/doo.png',
+img1 = cv2.imread('./files/Train/100_new/100.jpg',
                   cv2.IMREAD_GRAYSCALE)          # queryImage
 # img2 = cv2.imread('./ground_truth/100_new/8.jpg',
 #                   cv2.IMREAD_GRAYSCALE)  # trainImage
