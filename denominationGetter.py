@@ -4,8 +4,8 @@
 from cv2 import cv2
 from os import listdir
 import matplotlib.pyplot as plt
-from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
-from Denomination.imageDisplay import display
+from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
+from imageDisplay import display
 
 
 def getDenomination(filePath):
@@ -68,11 +68,13 @@ def getDenomination(filePath):
         print('good matches ', max_val)
         train_img = cv2.imread(training_set[max_pt])
         note = str(training_set[max_pt])[12:-4]
-        print('\nDetected note: ', note)
+        print('\nDetected note: ', note[:note.index("/")])
+        
 
         # uncomment to display the side by side comparison between the input image and the matched image
         img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
         (plt.imshow(img3), plt.show())
+        return note[:note.index("/")]
     else:
         print('No Matches')
 

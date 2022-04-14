@@ -1,4 +1,4 @@
-from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
+from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
 # from imageDisplay import display
 import os
 
@@ -82,4 +82,41 @@ f(0, len(training_set))
 # cv2.imshow("Output", image)
 # cv2.waitKey(0)
 
+def noteCrop(img):
+    # train image
+    train_img1 = cv2.imread(img)
+    # cv2.imshow("color", train_img1)
+    # display("color", train_img1)
+    train_img = cv2.cvtColor(train_img1, cv2.COLOR_BGR2GRAY)
+    # cv2.imshow("grayscale", train_img)
+    # display("grayscale", train_img)
+    edge_img = cv2.Canny(train_img, 30, 200)
+    # cv2.imshow("edges", edge_img)
+
+    # applying closing function
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+    closed = cv2.morphologyEx(edge_img, cv2.MORPH_CLOSE, kernel)
+    # cv2.imshow("Closed", closed)
+
+    # finding_contours
+    (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    cnts = sorted(cnts, key=cv2.contourArea, reverse=True)[:1]
+
+    # for c in cnts:
+    #     peri = cv2.arcLength(c, True)
+    #     approx = cv2.approxPolyDP(c, 0.02 * peri, True)
+    #     cv2.drawContours(train_img1, [approx], -1, (0, 255, 0), 2)
+    # cv2.imshow("Output", train_img1)
+
+    #cv2.imwrite("./working_dir/"+str(i)+".png", train_img1)
+    idx = 0
+    for c in cnts:
+        x, y, w, h = cv2.boundingRect(c)
+        if True:#w > 150 and h > 150:
+            idx += 1
+            new_img = train_img1[y:y + h, x:x + w]
+            cv2.imwrite("./working_dir/"+"note"+ '.png', new_img)
+            #cv2.rectangle(train_img1, (x,y), (x+w, y+h), (0,255,0), 2)
+            # cv2.imshow("box", train_img1)
 

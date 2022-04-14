@@ -12,8 +12,7 @@ img2 = cv2.imread('../ground_truth/100_new/9.png',
 
 
 # img1 is the input image and denomination it's denomination
-def Matcher(img1, denomination):
-    pass
+
 
 
 def SIFTMatcher(img1, img2):
@@ -67,6 +66,23 @@ def ORBMatcher(img1, img2):
     img3 = cv2.drawMatches(
         img1, kp1, img2, kp2, matches[:7], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
     plt.imshow(img3), plt.show()
+
+
+def ORBrunner(note, den):
+    note = cv2.imread(note,
+                  cv2.IMREAD_GRAYSCALE) 
+    for i in range(13):
+        sec = cv2.imread(f"../ground_truth/{den}/{i}.jpg",
+                  cv2.IMREAD_GRAYSCALE) 
+        ORBMatcher(note,sec)
+
+def SIFTrunner(note, den):
+    note = cv2.imread(note,
+                  cv2.IMREAD_GRAYSCALE) 
+    for i in range(13):
+        sec = cv2.imread(f"../ground_truth/{den}/{i}.jpg",
+                  cv2.IMREAD_GRAYSCALE) 
+        SIFTMatcher(note,sec)
 
 
 if __name__ == '__main__':
