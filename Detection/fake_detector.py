@@ -6,7 +6,7 @@ img1 = cv2.imread('../files/Train/100_new/100.jpg',
                   cv2.IMREAD_GRAYSCALE)          # queryImage
 # img2 = cv2.imread('./ground_truth/100_new/8.jpg',
 #                   cv2.IMREAD_GRAYSCALE)  # trainImage
-img2 = cv2.imread('../ground_truth/100_new/9.png',
+img2 = cv2.imread('../ground_truth/100_new/8.png',
                   cv2.IMREAD_GRAYSCALE)  # trainImage testing for now
 # img2 = cv2.imread('./files/Train/100_new/3.jpg',cv2.IMREAD_GRAYSCALE) # trainImage
 
@@ -26,28 +26,31 @@ def SIFTMatcher(img1, img2):
     print(len(kp1), len(kp2))
     # BFMatcher with default params
     bf = cv2.BFMatcher()
-    matches = bf.knnMatch(des1, des2, k=2)
-    # Apply ratio test
-    good = []
-    mi = 0
+    try:
+        matches = bf.knnMatch(des1, des2, k=2)
+        # Apply ratio test
+        good = []
+        mi = 0
 
-    # # Draw first 10 matches.
-    # print("distance/ closest match", matches[0].distance, matches[1].distance)
+        # # Draw first 10 matches.
+        # print("distance/ closest match", matches[0].distance, matches[1].distance)
 
-    # img3 = cv2.drawMatches(
-    #     img1, kp1, img2, kp2, matches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    # plt.imshow(img3), plt.show()
+        # img3 = cv2.drawMatches(
+        #     img1, kp1, img2, kp2, matches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        # plt.imshow(img3), plt.show()
 
-    for m, n in matches:
-        if m.distance < 0.55*n.distance:
-            good.append([m])
-        mi = min(mi, abs(m.distance - n.distance))  # minimum distance
-    # cv.drawMatchesKnn expects list of lists as matches.
-    print(len(good))
-    print(mi)
-    img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
-                              None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    plt.imshow(img3), plt.show()
+        for m, n in matches:
+            if m.distance < 0.55*n.distance:
+                good.append([m])
+            mi = min(mi, abs(m.distance - n.distance))  # minimum distance
+        # cv.drawMatchesKnn expects list of lists as matches.
+        print(len(good))
+        print(mi)
+        img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
+                                  None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        plt.imshow(img3), plt.show()
+    except:
+        print("Orb Matcher failed, trying SIFT")
 
 
 def ORBMatcher(img1, img2):
