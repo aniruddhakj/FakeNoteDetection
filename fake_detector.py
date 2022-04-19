@@ -2,17 +2,16 @@ import numpy as np
 from cv2 import cv2
 import matplotlib.pyplot as plt
 
-img1 = cv2.imread('../files/Train/100_new/100.jpg',
+img1 = cv2.imread('./files/Train/100_new/100_new.jpg',
                   cv2.IMREAD_GRAYSCALE)          # queryImage
 # img2 = cv2.imread('./ground_truth/100_new/8.jpg',
 #                   cv2.IMREAD_GRAYSCALE)  # trainImage
-img2 = cv2.imread('../ground_truth/100_new/9.png',
+img2 = cv2.imread('./ground_truth/100_new/9.png',
                   cv2.IMREAD_GRAYSCALE)  # trainImage testing for now
 # img2 = cv2.imread('./files/Train/100_new/3.jpg',cv2.IMREAD_GRAYSCALE) # trainImage
 
 
 # img1 is the input image and denomination it's denomination
-
 
 
 def SIFTMatcher(img1, img2):
@@ -70,19 +69,20 @@ def ORBMatcher(img1, img2):
 
 def ORBrunner(note, den):
     note = cv2.imread(note,
-                  cv2.IMREAD_GRAYSCALE) 
+                      cv2.IMREAD_GRAYSCALE)
     for i in range(13):
         sec = cv2.imread(f"../ground_truth/{den}/{i}.jpg",
-                  cv2.IMREAD_GRAYSCALE) 
-        ORBMatcher(note,sec)
+                         cv2.IMREAD_GRAYSCALE)
+        ORBMatcher(note, sec)
+
 
 def SIFTrunner(note, den):
     note = cv2.imread(note,
-                  cv2.IMREAD_GRAYSCALE) 
+                      cv2.IMREAD_GRAYSCALE)
     for i in range(13):
         sec = cv2.imread(f"../ground_truth/{den}/{i}.jpg",
-                  cv2.IMREAD_GRAYSCALE) 
-        SIFTMatcher(note,sec)
+                         cv2.IMREAD_GRAYSCALE)
+        SIFTMatcher(note, sec)
 
 
 if __name__ == '__main__':
