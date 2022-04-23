@@ -1,23 +1,22 @@
 import numpy as np
 from cv2 import cv2
-import matplotlib.pyplot as plt
+import matplotlib
 
-img1 = cv2.imread('../files/Train/100_new/100.jpg',
-                  cv2.IMREAD_GRAYSCALE)          # queryImage
-# img2 = cv2.imread('./ground_truth/100_new/8.jpg',
-#                   cv2.IMREAD_GRAYSCALE)  # trainImage
-img2 = cv2.imread('../ground_truth/100_new/8.png',
-                  cv2.IMREAD_GRAYSCALE)  # trainImage testing for now
-# img2 = cv2.imread('./files/Train/100_new/3.jpg',cv2.IMREAD_GRAYSCALE) # trainImage
+import matplotlib.pyplot as plt
+import os
 
 
 # img1 is the input image and denomination it's denomination
-def Matcher(img1, denomination):
-    pass
+def Matcher(img1_path, denomination):
+    img1 = cv2.imread(img1_path)
+    for f in os.listdir(str("./ground_truth/" + denomination + "/")):
+        img2 = cv2.imread(str("./ground_truth/" + denomination + "/" + f),
+                          cv2.IMREAD_GRAYSCALE)
+        ORBMatcher(img1, img2)
 
 
 def SIFTMatcher(img1, img2):
-    # Initiate SIFT detector
+    # initialize SIFT creater
     sift = cv2.SIFT_create()
     # find the keypoints and descriptors with SIFT
     kp1, des1 = sift.detectAndCompute(img1, None)
@@ -50,28 +49,38 @@ def SIFTMatcher(img1, img2):
                                   None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         plt.imshow(img3), plt.show()
     except:
-        print("Orb Matcher failed, trying SIFT")
+        print("SIFT Matcher failed")
 
 
 def ORBMatcher(img1, img2):
     # Initiate ORB detector
-    orb = cv2.ORB_create(nfeatures=100000, scoreType=cv2.ORB_FAST_SCORE)
-    # find the keypoints and descriptors with ORB
-    kp1, des1 = orb.detectAndCompute(img1, None)
-    kp2, des2 = orb.detectAndCompute(img2, None)
+    try:
+        orb = cv2.ORB_create(nfeatures=100000, scoreType=cv2.ORB_FAST_SCORE)
+        # find the keypoints and descriptors with ORB
+        kp1, des1 = orb.detectAndCompute(img1, None)
+        kp2, des2 = orb.detectAndCompute(img2, None)
 
-    # create BFMatcher object
-    bf = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck=True)
-    # Match descriptors.
-    matches = bf.match(des1, des2)
-    # Sort them in the order of their distance.
-    matches = sorted(matches, key=lambda x: x.distance)
-    # Draw first 10 matches.
-    img3 = cv2.drawMatches(
-        img1, kp1, img2, kp2, matches[:7], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-    plt.imshow(img3), plt.show()
+        # create BFMatcher object
+        bf = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck=True)
+        # Match descriptors.
+        matches = bf.match(des1, des2)
+        # Sort them in the order of their distance.
+        matches = sorted(matches, key=lambda x: x.distance)
+        # Draw first 10 matches.
+        img3 = cv2.drawMatches(
+            img1, kp1, img2, kp2, matches[:7], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        plt.imshow(img3), plt.show()
+    except Exception as e:
+        print("Orb Matcher failed, trying SIFT")
 
 
 if __name__ == '__main__':
-    ORBMatcher(img1, img2)
-    SIFTMatcher(img1, img2)
+    img1 = cv2.imread('',
+                      cv2.IMREAD_GRAYSCALE)          # queryImage
+    # img2 = cv2.imread('./ground_truth/100_new/8.jpg',
+    #                   cv2.IMREAD_GRAYSCALE)  # trainImage
+    # img2 = cv2.imread('../ground_truth/100_new/8.png',
+    #                   cv2.IMREAD_GRAYSCALE)  # trainImage testing for now
+    # # img2 = cv2.imread('./files/Train/100_new/3.jpg',cv2.IMREAD_GRAYSCALE) # trainImage
+
+    Matcher("../files/Train/100_new/100.jpg", "100_new")
