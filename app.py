@@ -23,13 +23,14 @@ def main():
             st.write("Do you want to use the cropped image of the original image?")
             denomination = None
             path = ""
+            img = None
             if st.button("Use Cropped Image"):
                 path = "./temp/cropped/crpd.png"
-                denomination = denominationGetter.getDenomination(path)
+                denomination, img = denominationGetter.getDenomination(path)
 
             elif st.button("Use Original Image"):
                 path = "./temp/"+img_file.name
-                denomination = denominationGetter.getDenomination(path)
+                denomination, img = denominationGetter.getDenomination(path)
 
             if (denomination == ""):
                 st.error("This does not seem to be a vailid image")
@@ -37,7 +38,12 @@ def main():
                 pass
             else:
                 st.success("Denomination: {}".format(denomination))
-                fake_detector.Matcher(path, denomination)
+                st.image(img, caption="knn matched image")
+                images = fake_detector.Matcher(path, denomination)
+                if images != None:
+                    for img in images:
+                        st.image(img, caption="security features")
+
                 print("done")
 
         except Exception as e:

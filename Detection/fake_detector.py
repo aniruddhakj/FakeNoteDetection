@@ -1,18 +1,18 @@
 import numpy as np
 from cv2 import cv2
-import matplotlib
-
 import matplotlib.pyplot as plt
 import os
 
 
 # img1 is the input image and denomination it's denomination
 def Matcher(img1_path, denomination):
+    images = []
     img1 = cv2.imread(img1_path)
     for f in os.listdir(str("./ground_truth/" + denomination + "/")):
         img2 = cv2.imread(str("./ground_truth/" + denomination + "/" + f),
                           cv2.IMREAD_GRAYSCALE)
-        ORBMatcher(img1, img2)
+        images.append(SIFTMatcher(img1, img2))
+    return images
 
 
 def SIFTMatcher(img1, img2):
@@ -47,7 +47,9 @@ def SIFTMatcher(img1, img2):
         print(mi)
         img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
                                   None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        return img3
         plt.imshow(img3), plt.show()
+
     except:
         print("SIFT Matcher failed")
 
@@ -69,9 +71,12 @@ def ORBMatcher(img1, img2):
         # Draw first 10 matches.
         img3 = cv2.drawMatches(
             img1, kp1, img2, kp2, matches[:7], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        return img3
         plt.imshow(img3), plt.show()
+
     except Exception as e:
         print("Orb Matcher failed, trying SIFT")
+        return SIFTMatcher(img1, img2)
 
 
 if __name__ == '__main__':

@@ -72,12 +72,13 @@ def getDenomination(filePath):
 
         # uncomment to display the side by side comparison between the input image and the matched image
         img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
+
         plt.imshow(img3), plt.show()
-        return note.split('/')[0]
+        return (note.split('/')[0], img3)
 
     else:
         print('No Matches')
-        return ""
+        return ("", "")
 
 
 # testing denominations
