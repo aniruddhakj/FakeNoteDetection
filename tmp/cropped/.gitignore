@@ -1,0 +1,4 @@
+*
+!.gitignore
+# except for the cropped directory
+!cropped/
