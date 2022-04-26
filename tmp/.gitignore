@@ -5,4 +5,4 @@
 
 !.gitignore
 # except for the cropped directory
-!temp/cropped
+!/cropped
