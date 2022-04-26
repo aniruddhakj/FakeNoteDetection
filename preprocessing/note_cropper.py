@@ -7,7 +7,7 @@ from cv2 import cv2
 
 
 def initialize():
-    train_path = 'temp/'
+    train_path = 'tmp/'
     training_set = []
     for f in os.listdir(train_path):
         if f == '.DS_Store':
@@ -53,7 +53,7 @@ def f(path):
 
         idx += 1
         new_img = train_img1[y:y + h, x:x + w]
-        cv2.imwrite("./temp/cropped/crpd.png", new_img)
+        cv2.imwrite("./tmp/cropped/crpd.png", new_img)
         cv2.rectangle(train_img1, (x, y), (x+w, y+h), (0, 255, 0), 2)
         print("image cropped ")
         # cv2.imshow("box", train_img1)

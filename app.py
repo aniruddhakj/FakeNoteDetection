@@ -15,9 +15,9 @@ def main():
     if img_file:
         save_uploaded_file(img_file)
         st.success("Image Cropped")
-        denominationGetter.getDenomination("./temp/cropped/crpd.png")
+        denominationGetter.getDenomination("./tmp/cropped/crpd.png")
         try:
-            cropped_img = Image.open("./temp/cropped/crpd.png")
+            cropped_img = Image.open("./tmp/cropped/crpd.png")
             st.image(cropped_img, caption="Cropped Image",
                      use_column_width=True)
             st.write("Do you want to use the cropped image of the original image?")
@@ -25,11 +25,11 @@ def main():
             path = ""
             img = None
             if st.button("Use Cropped Image"):
-                path = "./temp/cropped/crpd.png"
+                path = "./tmp/cropped/crpd.png"
                 denomination, img = denominationGetter.getDenomination(path)
 
             elif st.button("Use Original Image"):
-                path = "./temp/"+img_file.name
+                path = "./tmp/"+img_file.name
                 denomination, img = denominationGetter.getDenomination(path)
 
             if (denomination == ""):
@@ -52,14 +52,14 @@ def main():
 
 def save_uploaded_file(uploadedfile):
     '''Saves the selected image in the directory specified'''
-    with open(os.path.join("./temp", uploadedfile.name), "wb") as f:
+    with open(os.path.join("./tmp", uploadedfile.name), "wb+") as f:
         f.write(uploadedfile.getbuffer())
 
         # if the cropped is messing up, skip the cropping part by commenting this line
-        cropper.f("./temp/"+uploadedfile.name)
+        cropper.f("./tmp/"+uploadedfile.name)
 
         # uncomment this line to directy skip cropping and do detection of input image
-        # denominationGetter.getDenomination("files/temp/" + uploadedfile.name)
+        # denominationGetter.getDenomination("files/tmp/" + uploadedfile.name)
     return st.success("Image Uploaded  {}".format(uploadedfile.name))
 
 

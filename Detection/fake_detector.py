@@ -11,7 +11,7 @@ def Matcher(img1_path, denomination):
     for f in os.listdir(str("./ground_truth/" + denomination + "/")):
         img2 = cv2.imread(str("./ground_truth/" + denomination + "/" + f),
                           cv2.IMREAD_GRAYSCALE)
-        images.append(SIFTMatcher(img1, img2))
+        images.append(ORBMatcher(img1, img2))
     return images
 
 
@@ -30,14 +30,6 @@ def SIFTMatcher(img1, img2):
         # Apply ratio test
         good = []
         mi = 0
-
-        # # Draw first 10 matches.
-        # print("distance/ closest match", matches[0].distance, matches[1].distance)
-
-        # img3 = cv2.drawMatches(
-        #     img1, kp1, img2, kp2, matches[:10], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-        # plt.imshow(img3), plt.show()
-
         for m, n in matches:
             if m.distance < 0.55*n.distance:
                 good.append([m])
@@ -48,8 +40,7 @@ def SIFTMatcher(img1, img2):
         img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
                                   None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         return img3
-        plt.imshow(img3), plt.show()
-
+        # plt.imshow(img3), plt.show()
     except:
         print("SIFT Matcher failed")
 

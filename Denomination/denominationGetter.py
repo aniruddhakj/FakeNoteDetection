@@ -27,6 +27,7 @@ def getDenomination(filePath):
     # originalBin = convertToBinary(original)
     # display('BINARY IMAGE', originalBin)
     # display('Input Processed Image', original)
+    
     # keypoints and descriptors
     (kp1, des1) = orb.detectAndCompute(test_img, None)
 
@@ -37,7 +38,7 @@ def getDenomination(filePath):
             continue
         folder = (train_path + f)
         folder += '/'
-        print(folder)
+        # print(folder)
         for image in listdir(folder):
             if image.endswith(('.jpg', '.png', '.jpeg')):
                 training_set.append(folder + image)
@@ -61,14 +62,12 @@ def getDenomination(filePath):
             max_val = len(good)
             max_pt = i
             max_kp = kp2
-        print(i, ' ', training_set[i], ' ', len(good))
+        # print(i, ' ', training_set[i], ' ', len(good))
 
     if max_val != 8:
-        print(training_set[max_pt])
-        print('good matches ', max_val)
         train_img = cv2.imread(training_set[max_pt])
         note = str(training_set[max_pt])[12:-4]
-        print('\nDetected note: ', note)
+        # print('\nDetected note: ', note)
 
         # uncomment to display the side by side comparison between the input image and the matched image
         img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
