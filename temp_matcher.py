@@ -5,7 +5,7 @@ from Denomination.imageDisplay import display
 
 kernel = np.ones((3, 3), np.float32) / 9
 kernel2 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
-cannyLow, cannyHigh = 30, 200
+cannyLow, cannyHigh = 20, 100
 
 # Load template image , Convert grayscale , Detect edge
 # Template matching using edges instead of the original image can greatly improve the accuracy of template matching .
@@ -19,7 +19,7 @@ def matcher(path,note):
     template = cv2.resize(template, dim, interpolation=cv2.INTER_AREA)
     # cv2.imshow("template", template)
     template = cv2.filter2D(template, -1, kernel)
-    # template = cv2.Canny(template, cannyLow, cannyHigh)
+    template = cv2.Canny(template, cannyLow, cannyHigh)
     # template = cv2.morphologyEx(template, cv2.MORPH_CLOSE, kernel2)
     (tH, tW) = template.shape[:2]
     cv2.imshow("Template", template)
@@ -42,8 +42,8 @@ def matcher(path,note):
         # The image is calculated using exactly the same parameters as the template image Canny Edge representation ;
         # Use cv2.matchTemplate Apply template matching ;
         # cv2.minMaxLoc Get the relevant results and return a 4 Tuples , Which contains the minimum correlation value 、 Maximum correlation value 、 The minimum （x,y） Coordinates and maximum values （x,y） coordinate . We only deal with the maximum and （x,y）- Coordinates of interest , Therefore, only the maximum value is retained and the minimum value is discarded .
-        # edged = cv2.Canny(resized, cannyLow, cannyHigh)
-        edged = resized
+        edged = cv2.Canny(resized, cannyLow, cannyHigh)
+        # edged = resized
         # edged = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel2)
         result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF_NORMED)
         (_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
@@ -70,8 +70,8 @@ def matcher(path,note):
     # cv2.waitKey(0)
     resized = imutils.resize(gray, width=int(gray.shape[1] * foundScale))
     r = gray.shape[1] / float(resized.shape[1])
-    # edged = cv2.Canny(resized, cannyLow, cannyHigh)
-    edged = gray
+    edged = cv2.Canny(resized, cannyLow, cannyHigh)
+    # edged = gray
     # edged = cv2.morphologyEx(edged, cv2.MORPH_CLOSE, kernel2)
     result = cv2.matchTemplate(edged, template, cv2.TM_CCOEFF_NORMED)
     (_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
@@ -88,10 +88,10 @@ def matcher(path,note):
 
 def runner(note, den):
     
-    for i in range(1+0, 1+9):
+    for i in range(1+8, 1+9):
         matcher(f"ground_truth/{den}/{i}.png",note)
 
 
 # runner('files/Train/100_new/100.jpg',"100_new")
-# runner('files/Test/india_100_2.jpg',"100_new")
-runner('files/Test/100.3.jpg',"100_new")
+runner('files/Test/india_100_2.jpg',"100_new")
+# runner('files/Test/100.3.jpg',"100_new")
