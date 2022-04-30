@@ -1,4 +1,4 @@
-from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
+from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
 # from imageDisplay import display
 import os
 
@@ -17,6 +17,7 @@ for f in os.listdir(train_path):
     for image in os.listdir(folder):
         if image.endswith(('.jpg', '.png', '.jpeg')):
             training_set.append(folder + image)
+
 
 def f(start, end):
 
@@ -43,15 +44,16 @@ def f(start, end):
         # closed = edge_img
 
         # finding_contours
-        (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        (cnts, _) = cv2.findContours(closed.copy(),
+                                     cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-        cnts = sorted(cnts, key=cv2.contourArea, reverse=True)#[:1]
+        cnts = sorted(cnts, key=cv2.contourArea, reverse=True)  # [:1]
         print(len(cnts))
 
         # for c in cnts:
         #     peri = cv2.arcLength(c, True)
         #     approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-            # cv2.drawContours(train_img1, [approx], -1, (0, 255, 0), 2)
+        # cv2.drawContours(train_img1, [approx], -1, (0, 255, 0), 2)
         # cv2.imshow("Output", train_img1)
 
         # cv2.imwrite("./temp2/"+str(i)+".png", train_img1)
@@ -67,16 +69,17 @@ def f(start, end):
             peri = cv2.arcLength(c, True)
             approx = cv2.approxPolyDP(c, 0.00005*peri, True)
             x, y, w, h = cv2.boundingRect(approx)
-            if True:#w > 150 and h > 150:
+            if True:  # w > 150 and h > 150:
                 idx += 1
                 new_img = train_img1[y:y + h, x:x + w]
                 # cv2.imwrite("./temp2/"+str(i)+"_"+str(idx) + '.png', new_img)
-                cv2.rectangle(train_img1, (x,y), (x+w, y+h), (0,255,0), 2)
+                cv2.rectangle(train_img1, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.imshow("box", train_img1)
     cv2.waitKey(0)
     print(ac, bc)
 
-x=0
+
+x = 0
 f(x, x+1)
 # f(0, len(training_set))
 
@@ -99,5 +102,3 @@ f(x, x+1)
 #         cv2.drawContours(image, [approx], -1, (0, 255, 0), 2)
 # cv2.imshow("Output", image)
 # cv2.waitKey(0)
-
-
