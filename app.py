@@ -6,6 +6,7 @@ import os
 import Denomination.denominationGetter as denominationGetter
 import preprocessing.note_cropper as cropper
 import Detection.fake_detector as fake_detector
+from temp_matcher import runner
 from PIL import Image
 
 
@@ -40,16 +41,36 @@ def main():
             else:
                 st.success("Denomination: {}".format(denomination))
                 st.image(img, caption="knn matched image")
-                images, avg = fake_detector.Matcher(path, denomination)
 
                 # add template matching here
+                template_images, template_arr = runner(path, denomination)
+
                 # combine avg value with template matching, if valid print images else say it's fake
-                if images != None:
-                    for img in images:
-                        st.image(img, caption="security features")
-                    st.success("This seems to be a legit note")
+                percent_matches = 0
+                if template_images != None:
+                    for clone, template in template_images:
+                        st.image(template, caption="security features")
+                        st.image(clone, caption="security feature bounding box")
+                    template_avg = sum(template_arr)/len(template_arr)
+                    num_matches = sum([1 if x > 0.75 else 0 for x in template_arr])
+                    percent_matches = num_matches/len(template_arr)*100
+                    print(percent_matches)
+                    print(template_avg)
+                    if percent_matches > 80:
+                        st.success("This seems to be a legit note")
+                    else:
+                        st.error("This seems to be a fake note")
                 else:
                     st.error("This seems to be a fake note")
+
+                if percent_matches < 80:
+                    images, avg = fake_detector.Matcher(path, denomination)
+                    if images != None:
+                        for img in images:
+                            st.image(img, caption="security features")
+                        st.success("This seems to be a legit note")
+                    else:
+                        st.error("This seems to be a fake note")
 
                 print("done")
 

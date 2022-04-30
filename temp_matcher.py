@@ -2,6 +2,7 @@ import cv2 # opencv binding
 import imutils # Some methods of image processing
 import numpy as np # numpy Perform numerical processing
 from Denomination.imageDisplay import display
+import os
 
 kernel = np.ones((3, 3), np.float32) / 9
 kernel2 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
@@ -88,20 +89,23 @@ def matcher(path,note):
     print("({},{}) to ({},{})".format(startX, startY, endX, endY))
     print("Scaling =", foundScale)
 
-    if found[0] > 0.75:
-        return 1
-    else:
-        return 0
+    return clone, template, found[0]
+
 
 def runner(note, den):
-    num_matches = 0
-    for i in range(1+0, 1+9):
-        num_matches += matcher(f"ground_truth/{den}/{i}.png",note)
-    print(num_matches)
+    match_arr = []
+    img_arr = []
+    for f in os.listdir(str("./ground_truth/" + den + "/")):
+        clone, template, conf = matcher("./ground_truth/" + den + "/"+f, note)
+        img_arr.append((clone, template))
+        match_arr.append(conf)
+    # for i in range(1+0, 1+9):
+    #     num_matches += matcher(f"ground_truth/{den}/{i}.png",note)
+    return img_arr, match_arr
 
 
-runner('files/Train/100_new/100.jpg',"100_new")
-runner('files/Test/india_100_2.jpg',"100_new")
-runner('files/Test/100.3.jpg',"100_new")
+# runner('files/Train/100_new/100.jpg',"100_new")
+# runner('files/Test/india_100_2.jpg',"100_new")
+# runner('files/Test/100.3.jpg',"100_new")
 # runner('files/Test/19.jpg', "10_new")
 # runner('files/Test/9.jpg', "10_new")
