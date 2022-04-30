@@ -1,6 +1,6 @@
-import cv2 # opencv binding
-import imutils # Some methods of image processing
-import numpy as np # numpy Perform numerical processing
+import cv2  # opencv binding
+import imutils  # Some methods of image processing
+import numpy as np  # numpy Perform numerical processing
 from Denomination.imageDisplay import display
 import os
 
@@ -10,10 +10,13 @@ cannyLow, cannyHigh = 10, 150
 
 # Load template image , Convert grayscale , Detect edge
 # Template matching using edges instead of the original image can greatly improve the accuracy of template matching .
-def matcher(path,note):
+
+
+def matcher(path, note):
     template = cv2.imread(path)
     template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-    scale_percent = 20  # percent of original size (use 40% for complex flower design in 100 rupee note)
+    # percent of original size (use 40% for complex flower design in 100 rupee note)
+    scale_percent = 20
     width = int(template.shape[1] * scale_percent / 100)
     height = int(template.shape[0] * scale_percent / 100)
     dim = (width, height)
@@ -33,7 +36,7 @@ def matcher(path,note):
     gray = cv2.filter2D(gray, -1, kernel)
     found = None
     # Traverse the image size
-    for scale in np.linspace(0.2, 3.0, 60)[::-1]:
+    for scale in np.linspace(0.2, 2.0, 40)[::-1]:
         resized = imutils.resize(gray, width=int(gray.shape[1] * scale))
         # print(resized.shape, tH, tW)
         r = gray.shape[1] / float(resized.shape[1])
@@ -55,7 +58,7 @@ def matcher(path,note):
     # Draw a bounding box in the detected area
         clone = np.dstack([edged, edged, edged])
         cv2.rectangle(clone, (maxLoc[0], maxLoc[1]),
-        (maxLoc[0] + tW, maxLoc[1] + tH), (0, 0, 255), 2)
+                      (maxLoc[0] + tW, maxLoc[1] + tH), (0, 0, 255), 2)
         # cv2.imshow("Visualize", clone)
         # cv2.waitKey(0)
         # If we find a new maximum correction value , Update bookkeeping variable values
@@ -84,8 +87,8 @@ def matcher(path,note):
     # cv2.imshow("Visualize", clone)
     # cv2.waitKey(0)
 
-
-    print("Correlation Value:", found[0], found[0]/((endX-startX)*(endY-startY)))
+    print("Correlation Value:", found[0],
+          found[0]/((endX-startX)*(endY-startY)))
     print("({},{}) to ({},{})".format(startX, startY, endX, endY))
     print("Scaling =", foundScale)
 

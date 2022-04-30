@@ -18,17 +18,6 @@ def getDenomination(filePath):
     orb = cv2.ORB_create(scoreType=cv2.ORB_FAST_SCORE)
     test_img = readImage(filePath)
 
-    # Uncomment this block to display image after the various processing steps
-    # original2 = resizeImage(test_img, 0.4)
-    # display('Input Image', original2)
-    # original1 = imageToGray(original2)
-    # original3 = medianBlur(original1)
-    # original = adaptiveThresh(original3)
-    # originalBin = convertToBinary(original)
-    # display('BINARY IMAGE', originalBin)
-    # display('Input Processed Image', original)
-
-    # keypoints and descriptors
     (kp1, des1) = orb.detectAndCompute(test_img, None)
 
     train_path = 'files/Train/'
@@ -65,11 +54,6 @@ def getDenomination(filePath):
                 good.append(m)
             else:
                 break
-        print("+++++++++++++++++++++++++++++++++++++++++++++++")
-        print("for " + training_set[i])
-        for m in matches:
-            print(m.distance, end=" ")
-        print("=============================================")
 
         if len(good) > max_val:
 
@@ -81,17 +65,12 @@ def getDenomination(filePath):
             if m.distance < 50:
                 good.append(m)
 
-        # print(i, ' ', training_set[i], ' ', len(good))
-
     if max_val != 8:
         train_img = cv2.imread(training_set[max_pt])
         note = str(training_set[max_pt])[12:-4]
-        # print('\nDetected note: ', note)
-
-        # uncomment to display the side by side comparison between the input image and the matched image
         img3 = cv2.drawMatches(
             test_img, kp1, train_img, kp2, None, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-        plt.imshow(img3), plt.show()
+        # plt.imshow(img3), plt.show()
         return (note.split('/')[0], img3)
 
     else:
