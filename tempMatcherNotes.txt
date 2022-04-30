@@ -3,3 +3,5 @@ Does a good job for most features
 Use grayscale image for bar - different threshold too (0.75). Maybe use multiple thresholds.
 Struggles with the low intensity flower pattern feature
 Try contrast stretching
+
+scale = 20% was fine with grayscale, (20,200)
