@@ -48,9 +48,7 @@ def main():
                 # combine avg value with template matching, if valid print images else say it's fake
                 percent_matches = 0
                 if template_images != None:
-                    for clone, template in template_images:
-                        st.image(template, caption="security features")
-                        st.image(clone, caption="security feature bounding box")
+
                     template_avg = sum(template_arr)/len(template_arr)
                     num_matches = sum(
                         [1 if x > 0.75 else 0 for x in template_arr])
@@ -59,8 +57,14 @@ def main():
                     print(template_avg)
                     if percent_matches > 70:
                         st.success("This seems to be a legit note")
+                        for clone, template in template_images:
+                            st.image(template, caption="security features")
+                            st.image(
+                                clone, caption="security feature bounding box")
                     else:
+                        st.image(path, caption="knn matched image")
                         st.error("This seems to be a fake note")
+
                 else:
                     st.error("This seems to be a fake note")
 
