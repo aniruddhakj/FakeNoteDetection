@@ -58,11 +58,6 @@ def SIFTMatcher(img1, img2):
 
         good_vals.append(len(good))
 
-        # print("***********************************************\nMinimum distance: {}".format(mi))
-        # avg = sum(good)/len(good)
-
-        # print("avg: ", avg)
-
         img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
                                   None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         return img3
@@ -103,12 +98,6 @@ def ORBMatcher(img1, img2):
 
 
 if __name__ == '__main__':
-    img1 = cv2.imread('',
-                      cv2.IMREAD_GRAYSCALE)          # queryImage
-    # img2 = cv2.imread('./ground_truth/100_new/8.jpg',
-    #                   cv2.IMREAD_GRAYSCALE)  # trainImage
-    # img2 = cv2.imread('../ground_truth/100_new/8.png',
-    #                   cv2.IMREAD_GRAYSCALE)  # trainImage testing for now
-    # # img2 = cv2.imread('./files/Train/100_new/3.jpg',cv2.IMREAD_GRAYSCALE) # trainImage
+    img1 = cv2.imread('', cv2.IMREAD_GRAYSCALE)        
 
     Matcher("../files/Train/100_new/100.jpg", "100_new")

@@ -4,8 +4,10 @@
 from cv2 import cv2
 from os import listdir
 import matplotlib.pyplot as plt
-from preprocessing.processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
-from Denomination.imageDisplay import display
+from preprocessing.processing import readImage
+
+# from preprocessing.processing import resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
+# from Denomination.imageDisplay import display
 
 
 def getDenomination(filePath):
@@ -27,13 +29,11 @@ def getDenomination(filePath):
             continue
         folder = (train_path + f)
         folder += '/'
-        # print(folder)
         for image in listdir(folder):
             if image.endswith(('.jpg', '.png', '.jpeg')):
                 training_set.append(folder + image)
 
     for i in range(0, len(training_set)):
-        # train image
         train_img1 = cv2.imread(training_set[i])
         train_img = cv2.cvtColor(train_img1, cv2.COLOR_BGR2GRAY)
 
@@ -44,11 +44,7 @@ def getDenomination(filePath):
         matches = bf.match(des1, des2)
         matches = sorted(matches, key=lambda x: x.distance)
 
-        # all_matches = bf.knnMatch(des1, des2, k=2)
         good = []
-        # for (m, n) in all_matches:
-        #     if m.distance < 0.789 * n.distance:  # 0.789 is the ratio of the distance between the two closest matches
-        #         good.append([m])
         for m in matches:
             if m.distance < 50:
                 good.append(m)
@@ -70,7 +66,6 @@ def getDenomination(filePath):
         note = str(training_set[max_pt])[12:-4]
         img3 = cv2.drawMatches(
             test_img, kp1, train_img, kp2, None, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-        # plt.imshow(img3), plt.show()
         return (note.split('/')[0], img3)
 
     else:
@@ -78,6 +73,5 @@ def getDenomination(filePath):
         return ("", "")
 
 
-# testing denominations
 if __name__ == '__main__':
     getDenomination('files/Test/100.jpg')

@@ -53,14 +53,13 @@ def main():
                     num_matches = sum(
                         [1 if x > 0.75 else 0 for x in template_arr])
                     percent_matches = num_matches/len(template_arr)*100
-                    print(percent_matches)
-                    print(template_avg)
+                    print("CONFIDENCE = ", percent_matches, "%")   
                     if percent_matches > 70:
-                        st.success("This seems to be a legit note")
                         for clone, template in template_images:
                             st.image(template, caption="security features")
-                            st.image(
-                                clone, caption="security feature bounding box")
+                            st.image(clone, caption="security feature bounding box")
+                        st.success("This seems to be a legit note")
+                        
                     else:
                         st.image(path, caption="knn matched image")
                         st.error("This seems to be a fake note")
@@ -77,8 +76,6 @@ def main():
                     else:
                         st.error("This seems to be a fake note")
 
-                print("done")
-
         except Exception as e:
             st.error("Error: {}".format(e))
 
@@ -90,9 +87,6 @@ def save_uploaded_file(uploadedfile):
 
         # if the cropped is messing up, skip the cropping part by commenting this line
         cropper.f("./tmp/"+uploadedfile.name)
-
-        # uncomment this line to directy skip cropping and do detection of input image
-        # denominationGetter.getDenomination("files/tmp/" + uploadedfile.name)
     return st.success("Image Uploaded  {}".format(uploadedfile.name))
 
 

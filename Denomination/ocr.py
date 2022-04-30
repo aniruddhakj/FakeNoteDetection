@@ -1,6 +1,3 @@
-# from processing import readImage, resizeImage, imageToGray, medianBlur, adaptiveThresh, convertToBinary
-# from Denomination.imageDisplay import display
-
 from pytesseract import *
 import cv2
 import numpy as np

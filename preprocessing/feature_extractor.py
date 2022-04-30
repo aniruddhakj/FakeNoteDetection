@@ -24,11 +24,7 @@ def f(start, end):
     for i in range(start, end):
         # train image
         train_img1 = cv2.imread(training_set[i])
-        # cv2.imshow("color", train_img1)
-        # display("color", train_img1)
         train_img = cv2.cvtColor(train_img1, cv2.COLOR_BGR2GRAY)
-        # cv2.imshow("grayscale", train_img)
-        # display("grayscale", train_img)
 
         kernel = np.ones((3, 3), np.float32) / 9
         dst = cv2.filter2D(train_img, -1, kernel)
@@ -50,13 +46,6 @@ def f(start, end):
         cnts = sorted(cnts, key=cv2.contourArea, reverse=True)  # [:1]
         print(len(cnts))
 
-        # for c in cnts:
-        #     peri = cv2.arcLength(c, True)
-        #     approx = cv2.approxPolyDP(c, 0.02 * peri, True)
-        # cv2.drawContours(train_img1, [approx], -1, (0, 255, 0), 2)
-        # cv2.imshow("Output", train_img1)
-
-        # cv2.imwrite("./temp2/"+str(i)+".png", train_img1)
         ac = 0
         bc = 0
         idx = 0
@@ -72,7 +61,6 @@ def f(start, end):
             if True:  # w > 150 and h > 150:
                 idx += 1
                 new_img = train_img1[y:y + h, x:x + w]
-                # cv2.imwrite("./temp2/"+str(i)+"_"+str(idx) + '.png', new_img)
                 cv2.rectangle(train_img1, (x, y), (x+w, y+h), (0, 255, 0), 2)
         cv2.imshow("box", train_img1)
     cv2.waitKey(0)
