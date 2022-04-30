@@ -3,16 +3,35 @@ from cv2 import cv2
 import matplotlib.pyplot as plt
 import os
 
+good_vals = []
 
 # img1 is the input image and denomination it's denomination
+
+
 def Matcher(img1_path, denomination):
     images = []
+    global good_vals
+    good_vals = []
     img1 = cv2.imread(img1_path, cv2.IMREAD_GRAYSCALE)
     for f in os.listdir(str("./ground_truth/" + denomination + "/")):
+
         img2 = cv2.imread(str("./ground_truth/" + denomination + "/" + f),
                           cv2.IMREAD_GRAYSCALE)
         images.append(SIFTMatcher(img1, img2))
-    return images
+
+    print(good_vals)
+    avg = sum(good_vals)/len(good_vals)
+    print("avg: ", avg)
+
+    if (good_vals.count(0) + good_vals.count(1)) > 0.4*len(good_vals):
+        print(" FAKE ")
+        return (None, avg)
+    else:
+
+        if avg > len(good_vals):
+            print("Seem legit boss")
+
+    return (images, avg)
 
 
 def SIFTMatcher(img1, img2):
@@ -22,31 +41,36 @@ def SIFTMatcher(img1, img2):
     kp1, des1 = sift.detectAndCompute(img1, None)
     kp2, des2 = sift.detectAndCompute(img2, None)
 
-    print(len(kp1), len(kp2))
     # BFMatcher with default params
     bf = cv2.BFMatcher()
     try:
         matches = bf.knnMatch(des1, des2, k=2)
         # Apply ratio test
         good = []
-        mi = 0
+        mi = 9999999999999
+        v = 0
+
         for m, n in matches:
+            v += 1
             if m.distance < 0.55*n.distance:
                 good.append([m])
             mi = min(mi, abs(m.distance - n.distance))  # minimum distance
-        # cv.drawMatchesKnn expects list of lists as matches.
-        print(len(good))
-        print(mi)
+
+        good_vals.append(len(good))
+
+        # print("***********************************************\nMinimum distance: {}".format(mi))
+        # avg = sum(good)/len(good)
+
+        # print("avg: ", avg)
+
         img3 = cv2.drawMatchesKnn(img1, kp1, img2, kp2, good,
                                   None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         return img3
-        # plt.imshow(img3), plt.show()
-    except:
-        print("SIFT Matcher failed")
+    except Exception as e:
+        print("SIFT Matcher failed", e)
 
 
 def ORBMatcher(img1, img2):
-    # Initiate ORB detector
     try:
         orb = cv2.ORB_create(nfeatures=100000, scoreType=cv2.ORB_FAST_SCORE)
         # find the keypoints and descriptors with ORB
@@ -65,11 +89,6 @@ def ORBMatcher(img1, img2):
             if m.distance < 30:
                 good.append(m)
 
-        print("+++++++++++++++++++++++++++++++++++++++++++++++")
-        for m in matches:
-            print(m.distance, end=" ")
-        print("=============================================")
-
         if (len(good) > 1):
             img3 = cv2.drawMatches(
                 img1, kp1, img2, kp2, good, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
@@ -77,6 +96,7 @@ def ORBMatcher(img1, img2):
         else:
             print("no good points in orb, trying sift for this security feature")
             return SIFTMatcher(img1, img2)
+
     except Exception as e:
         print("Orb Matcher failed, trying SIFT")
         return SIFTMatcher(img1, img2)

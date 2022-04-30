@@ -1,3 +1,4 @@
+
 from Detection.fake_detector import Matcher
 import streamlit as st
 import tkinter
@@ -39,10 +40,16 @@ def main():
             else:
                 st.success("Denomination: {}".format(denomination))
                 st.image(img, caption="knn matched image")
-                images = fake_detector.Matcher(path, denomination)
+                images, avg = fake_detector.Matcher(path, denomination)
+
+                # add template matching here
+                # combine avg value with template matching, if valid print images else say it's fake
                 if images != None:
                     for img in images:
                         st.image(img, caption="security features")
+                    st.success("This seems to be a legit note")
+                else:
+                    st.error("This seems to be a fake note")
 
                 print("done")
 

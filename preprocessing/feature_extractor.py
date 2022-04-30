@@ -77,28 +77,3 @@ def f(start, end):
         cv2.imshow("box", train_img1)
     cv2.waitKey(0)
     print(ac, bc)
-
-
-x = 0
-f(x, x+1)
-# f(0, len(training_set))
-
-# image = cv2.imread(training_set[14])
-# gray_img = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-# edge_img = cv2.Canny(gray_img, 5, 200)
-# cv2.imshow("gray", gray_img)
-# cv2.imshow("edge", edge_img)
-# kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
-# closed = cv2.morphologyEx(edge_img, cv2.MORPH_CLOSE, kernel)
-# cv2.imshow("Closed", closed)
-#
-# # finding_contours
-# (cnts, _) = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-#
-# for c in cnts:
-#     peri = cv2.arcLength(c, True)
-#     approx = cv2.approxPolyDP(c, 0.03*peri, True)
-#     if len(approx) == 4:
-#         cv2.drawContours(image, [approx], -1, (0, 255, 0), 2)
-# cv2.imshow("Output", image)
-# cv2.waitKey(0)
