@@ -4,7 +4,7 @@ A project aimed at identifying fake Indian currency notes
 ## Getting Started
 1. Download and install Python3 from [this link](https://www.python.org/downloads/)
 2. Install [venv](https://pypi.org/project/virtualenv/) to create a virtual environment for the project.
-    - You can do this using a terminal and type :
+    - For Windows, You can do this using a terminal and type :
         ```bash
         py -m pip install --user virtualenv
         ```
