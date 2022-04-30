@@ -1,6 +1,10 @@
 # IPCV_Project
 A project aimed at identifying fake Indian currency notes
 
+## Index
+- [Getting Started](https://github.com/aniruddhakj/IPCV_Project/blob/main/README.md#getting-started)
+- [Running the App](https://github.com/aniruddhakj/IPCV_project/blob/main/README.md#running-the-app)
+
 ## Getting Started
 1. Download and install Python3 from [this link](https://www.python.org/downloads/)
 2. Install [venv](https://pypi.org/project/virtualenv/) to create a virtual environment for the project.
