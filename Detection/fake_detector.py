@@ -7,11 +7,11 @@ import os
 # img1 is the input image and denomination it's denomination
 def Matcher(img1_path, denomination):
     images = []
-    img1 = cv2.imread(img1_path)
+    img1 = cv2.imread(img1_path, cv2.IMREAD_GRAYSCALE)
     for f in os.listdir(str("./ground_truth/" + denomination + "/")):
         img2 = cv2.imread(str("./ground_truth/" + denomination + "/" + f),
                           cv2.IMREAD_GRAYSCALE)
-        images.append(ORBMatcher(img1, img2))
+        images.append(SIFTMatcher(img1, img2))
     return images
 
 
@@ -60,11 +60,23 @@ def ORBMatcher(img1, img2):
         # Sort them in the order of their distance.
         matches = sorted(matches, key=lambda x: x.distance)
         # Draw first 10 matches.
-        img3 = cv2.drawMatches(
-            img1, kp1, img2, kp2, matches[:7], None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-        return img3
-        plt.imshow(img3), plt.show()
+        good = []
+        for m in matches:
+            if m.distance < 30:
+                good.append(m)
 
+        print("+++++++++++++++++++++++++++++++++++++++++++++++")
+        for m in matches:
+            print(m.distance, end=" ")
+        print("=============================================")
+
+        if (len(good) > 1):
+            img3 = cv2.drawMatches(
+                img1, kp1, img2, kp2, good, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+            return img3
+        else:
+            print("no good points in orb, trying sift for this security feature")
+            return SIFTMatcher(img1, img2)
     except Exception as e:
         print("Orb Matcher failed, trying SIFT")
         return SIFTMatcher(img1, img2)

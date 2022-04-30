@@ -14,8 +14,8 @@ def getDenomination(filePath):
     max_pt = -1
     max_kp = 0
 
-    orb = cv2.ORB_create()  # Create ORB object with default values
-
+    # Create ORB object with default values
+    orb = cv2.ORB_create(scoreType=cv2.ORB_FAST_SCORE)
     test_img = readImage(filePath)
 
     # Uncomment this block to display image after the various processing steps
@@ -27,7 +27,7 @@ def getDenomination(filePath):
     # originalBin = convertToBinary(original)
     # display('BINARY IMAGE', originalBin)
     # display('Input Processed Image', original)
-    
+
     # keypoints and descriptors
     (kp1, des1) = orb.detectAndCompute(test_img, None)
 
@@ -51,17 +51,36 @@ def getDenomination(filePath):
         (kp2, des2) = orb.detectAndCompute(train_img, None)
 
         # Initialize the Brute Force Matcher object
-        bf = cv2.BFMatcher()
-        all_matches = bf.knnMatch(des1, des2, k=2)
+        bf = cv2.BFMatcher(cv2.NORM_HAMMING2, crossCheck=True)
+        matches = bf.match(des1, des2)
+        matches = sorted(matches, key=lambda x: x.distance)
+
+        # all_matches = bf.knnMatch(des1, des2, k=2)
         good = []
-        for (m, n) in all_matches:
-            if m.distance < 0.789 * n.distance:  # 0.789 is the ratio of the distance between the two closest matches
-                good.append([m])
+        # for (m, n) in all_matches:
+        #     if m.distance < 0.789 * n.distance:  # 0.789 is the ratio of the distance between the two closest matches
+        #         good.append([m])
+        for m in matches:
+            if m.distance < 50:
+                good.append(m)
+            else:
+                break
+        print("+++++++++++++++++++++++++++++++++++++++++++++++")
+        print("for " + training_set[i])
+        for m in matches:
+            print(m.distance, end=" ")
+        print("=============================================")
 
         if len(good) > max_val:
+
             max_val = len(good)
             max_pt = i
             max_kp = kp2
+
+        for m in matches:
+            if m.distance < 50:
+                good.append(m)
+
         # print(i, ' ', training_set[i], ' ', len(good))
 
     if max_val != 8:
@@ -70,8 +89,8 @@ def getDenomination(filePath):
         # print('\nDetected note: ', note)
 
         # uncomment to display the side by side comparison between the input image and the matched image
-        img3 = cv2.drawMatchesKnn(test_img, kp1, train_img, max_kp, good, 4)
-
+        img3 = cv2.drawMatches(
+            test_img, kp1, train_img, kp2, None, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         plt.imshow(img3), plt.show()
         return (note.split('/')[0], img3)
 
